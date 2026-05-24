@@ -1,12 +1,18 @@
 import { v2 as cloudinary } from 'cloudinary';
 
 export const getSignatureHandler = async (req, res) => {
+  // 👇 ADD THESE DUMP DIAGNOSTICS LINES HERE
+  console.log("=== RUNTIME CONFIGURATION INSPECTION ===");
+  console.log("Cloud Name Exists?:", !!process.env.CLOUDINARY_CLOUD_NAME);
+  console.log("API Key Exists?:", !!process.env.CLOUDINARY_API_KEY);
+  console.log("API Secret Exists?:", !!process.env.CLOUDINARY_API_SECRET);
+  console.log("========================================");
+
   try {
     const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
     const apiKey = process.env.CLOUDINARY_API_KEY;
     const apiSecret = process.env.CLOUDINARY_API_SECRET;
 
-    // 1. Defend against late environmental bindings
     if (!cloudName || !apiKey || !apiSecret) {
       console.error("❌ CLOUDINARY CONFIG ERROR: Keys are missing from process.env inside signature block.");
       return res.status(500).json({
@@ -15,7 +21,7 @@ export const getSignatureHandler = async (req, res) => {
       });
     }
 
-    // 2. Configure the SDK dynamically inline right before signing the signature package
+    // Initialize config dynamically right inside execution scope
     cloudinary.config({
       cloud_name: cloudName,
       api_key: apiKey,
@@ -25,7 +31,7 @@ export const getSignatureHandler = async (req, res) => {
     const timestamp = Math.round(new Date().getTime() / 1000);
     const folder = 'gym_progress_photos';
 
-    // 3. Compute the cryptographic secure hex signature
+    // Safe path execution using the direct utility method
     const signature = cloudinary.utils.api_sign_request(
       { timestamp, folder },
       apiSecret
