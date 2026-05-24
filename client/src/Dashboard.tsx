@@ -86,7 +86,8 @@ export const Dashboard = ({ user, getAuthToken }: DashboardProps) => {
   if (loadingToken) {
     return (
       <div style={{ background: "var(--bg-pure-black)", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <span style={{ fontFamily: "var(--font-heavy-display)", fontSize: "1.5rem", color: "var(--accent-gymshark)", uppercase: true, letterSpacing: "0.1em" }}>
+        {/* FIXED: 'uppercase: true' changed to standard 'textTransform: "uppercase"' */}
+        <span style={{ fontFamily: "var(--font-heavy-display)", fontSize: "1.5rem", color: "var(--accent-gymshark)", textTransform: "uppercase", letterSpacing: "0.1em" }}>
           Synchronizing Auth Matrix...
         </span>
       </div>

@@ -14,8 +14,8 @@ function App() {
   return (
     <>
       {/* -----------------------------------------------------
-         STATE A: USER IS LOGGED OUT (PREMIUM ACTIVE ENTRANCE GATE)
-         ----------------------------------------------------- */}
+          STATE A: USER IS LOGGED OUT (PREMIUM ACTIVE ENTRANCE GATE)
+          ----------------------------------------------------- */}
       <SignedOut>
         <div className="auth-gate-viewport">
           <div className="auth-gate-card">
@@ -46,10 +46,11 @@ function App() {
       </SignedOut>
 
       {/* -----------------------------------------------------
-         STATE B: USER IS LOGGED IN (OPERATIONAL WORKSPACE)
-         ----------------------------------------------------- */}
+          STATE B: USER IS LOGGED IN (OPERATIONAL WORKSPACE)
+          ----------------------------------------------------- */}
       <SignedIn>
-        <Dashboard user={user} getAuthToken={getAuthToken} />
+        {/* 'user || null' safely converts 'undefined' during loading states to satisfy TypeScript */}
+        <Dashboard user={user || null} getAuthToken={getAuthToken} />
       </SignedIn>
     </>
   );
