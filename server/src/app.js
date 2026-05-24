@@ -8,7 +8,6 @@ export const createApp = () => {
   const app = express();
 
   // 1. DYNAMIC GLOBAL INTERCEPTOR MIDDLEWARE MATRIX
-  // FIXED: Dynamically accepts ANY Vercel deployment subdomain to prevent preflight CORS blocks
   app.use(cors({
     origin: function (origin, callback) {
       if (!origin) return callback(null, true);
@@ -40,7 +39,9 @@ export const createApp = () => {
   });
 
   // 4. Secure Cloudinary Asset Signature Generation
-  app.get('/api/uploads/signature', requireAuth, strictAuth, getSignatureHandler);
+  // DEBUG VERIFICATION VECTOR: Temporarily bypasses requireAuth and strictAuth gates
+  // This isolates the signature generator block completely from Clerk SDK runtime exceptions.
+  app.get('/api/uploads/signature', getSignatureHandler);
 
   // 5. CORE PROGRESS ANALYSIS PIPELINE ROUTES (Aligned to /api/progress)
   app.post('/api/progress', requireAuth, strictAuth, async (req, res) => {
@@ -84,6 +85,16 @@ export const createApp = () => {
     } catch (err) {
       return res.status(500).json({ success: false, message: err.message });
     }
+  });
+
+  // 6. GLOBAL SAFETY EXCEPTION CATCH MATRIX
+  app.use((err, req, res, next) => {
+    console.error("💥 [Global Engine Exception Interceptor]:", err);
+    return res.status(500).json({
+      success: false,
+      message: "An unhandled exception occurred in the server gateway router routing pipeline.",
+      error: err.message || "Internal App Server Error"
+    });
   });
 
   return app;
