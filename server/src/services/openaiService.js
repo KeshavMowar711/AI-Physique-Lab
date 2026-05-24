@@ -2,9 +2,10 @@
 
 export const generateAiReport = async ({ currentCheckIn, previousCheckIn }) => {
   try {
-    const apiKey = process.env.GOOGLE_GENAI_API_KEY;
+    // FIXED: Aligned directly to match your GOOGLE_API_KEY written on your Render dashboard
+    const apiKey = process.env.GOOGLE_API_KEY || process.env.GOOGLE_GENAI_API_KEY;
     if (!apiKey) {
-      throw new Error("GOOGLE_GENAI_API_KEY is missing from your server environment.");
+      throw new Error("GOOGLE_API_KEY configuration variable is completely missing from your cloud cluster registry.");
     }
 
     console.log("🤖 Processing physique analysis via direct Gemini REST API link...");
@@ -29,7 +30,7 @@ export const generateAiReport = async ({ currentCheckIn, previousCheckIn }) => {
       }
     };
 
-    // Safely parse out front profile reference capture
+    // FIXED: Items are fetched and pushed directly into a uniform, single flat-level parts array
     if (currentCheckIn.photos?.front) {
       const frontData = await fetchImagePart(currentCheckIn.photos.front);
       if (frontData) contentsPayload.push(frontData);
@@ -55,7 +56,7 @@ export const generateAiReport = async ({ currentCheckIn, previousCheckIn }) => {
 
         Examine any provided images. Assess current conditioning, muscle shape, structural definition, and estimate their body fat percentage.
 
-        CRITICAL: Return your response EXACTLY as a single stringified JSON object. Do not include markdown wraps, code fences (\`\`\`json), or explanations outside the JSON object.
+        CRITICAL: Return your response EXACTLY as a single stringified JSON object matching this schema. Do not write any explanations outside the JSON block.
         
         Expected structure layout:
         {
@@ -68,16 +69,22 @@ export const generateAiReport = async ({ currentCheckIn, previousCheckIn }) => {
       `
     };
 
-    // Add prompt instructions to the evaluation loop
+    // Add prompt instructions flat into the evaluation loop alongside the base64 vectors
     contentsPayload.push(textPrompt);
 
-    // 3. Make direct REST API call to standard stable gemini endpoints
+    // 3. Make direct REST API call to stable gemini endpoints
     const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
     
     const geminiResponse = await fetch(endpoint, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ contents: [{ parts: contentsPayload }] })
+      // FIXED: Added strict responseMimeType instruction to guarantee a valid parse loop
+      body: JSON.stringify({ 
+        contents: [{ parts: contentsPayload }],
+        generationConfig: {
+          responseMimeType: "application/json"
+        }
+      })
     });
 
     if (!geminiResponse.ok) {
@@ -88,9 +95,9 @@ export const generateAiReport = async ({ currentCheckIn, previousCheckIn }) => {
     const jsonResult = await geminiResponse.json();
     const rawAiText = jsonResult?.candidates?.[0]?.content?.parts?.[0]?.text || "";
     
-    console.log("📥 Gemini Response Received:", rawAiText);
+    console.log("📥 Gemini Response Received successfully.");
 
-    // Clean up potential code fences string returns safely
+    // Clean up potential markdown formatting code blocks safely
     const cleanJsonString = rawAiText
       .replace(/```json/g, "")
       .replace(/```/g, "")
