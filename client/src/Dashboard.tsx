@@ -2,7 +2,6 @@ import { CheckInForm } from "./components/CheckInForm";
 import { useState, useEffect } from "react";
 
 interface DashboardProps {
-  // UPDATED: Changed from string | undefined to string | null to perfectly match Clerk's UserResource type
   user: { firstName?: string | null } | null;
   getAuthToken: () => Promise<string | null>;
 }
@@ -83,7 +82,6 @@ export const Dashboard = ({ user, getAuthToken }: DashboardProps) => {
     setLivePreviews(prev => ({ ...prev, [key]: url }));
   };
 
-  // Safe fallback screen if Clerk is still generating your secure connection
   if (loadingToken) {
     return (
       <div style={{ background: "var(--bg-pure-black)", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -97,7 +95,6 @@ export const Dashboard = ({ user, getAuthToken }: DashboardProps) => {
   return (
     <div style={{ background: "var(--bg-pure-black)", minHeight: "100vh" }}>
       
-      {/* HEADER HERO BANNER */}
       <div className="hero-header-section">
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <span style={{ fontSize: "0.85rem", fontWeight: "900", color: "var(--accent-gymshark)", textTransform: "uppercase", letterSpacing: "0.25em", display: "block" }}>
@@ -110,7 +107,6 @@ export const Dashboard = ({ user, getAuthToken }: DashboardProps) => {
         </div>
       </div>
 
-      {/* HORIZONTAL CARDS REFERENCE GRID ROW */}
       <div className="industrial-card-grid">
         <div className="gymshark-card">
           <div className="image-frame">
@@ -143,7 +139,6 @@ export const Dashboard = ({ user, getAuthToken }: DashboardProps) => {
         </div>
       </div>
 
-      {/* STATUS METRICS RECONSTRUCTION BANNER */}
       <div className="dashboard-stark-divider">
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <h2 className="stark-display-text">
@@ -155,7 +150,6 @@ export const Dashboard = ({ user, getAuthToken }: DashboardProps) => {
         </div>
       </div>
 
-      {/* OPERATIONS MANAGEMENT LAYOUT PANEL */}
       <div style={{ maxWidth: "1200px", margin: "50px auto", padding: "0 24px 100px 24px" }}>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 420px", gap: "40px" }}>
           
