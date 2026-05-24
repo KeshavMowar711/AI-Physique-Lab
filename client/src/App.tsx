@@ -49,8 +49,11 @@ function App() {
           STATE B: USER IS LOGGED IN (OPERATIONAL WORKSPACE)
           ----------------------------------------------------- */}
       <SignedIn>
-        {/* 'user || null' safely converts 'undefined' during loading states to satisfy TypeScript */}
-        <Dashboard user={user || null} getAuthToken={getAuthToken} />
+        {/* We explicitly build the shape DashboardProps expects to resolve strict null/undefined mismatches */}
+        <Dashboard 
+          user={user ? { firstName: user.firstName ?? undefined } : null} 
+          getAuthToken={getAuthToken} 
+        />
       </SignedIn>
     </>
   );
