@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useAuth } from "@clerk/clerk-react"; // IMPORT CLERK HOOK
 
 interface CheckInFormProps {
   authToken: string;
@@ -6,9 +7,10 @@ interface CheckInFormProps {
   onPhotoStaged: (key: "front" | "side" | "back", url: string) => void;
 }
 
-export const CheckInForm = ({ authToken, onSubmit, onPhotoStaged }: CheckInFormProps) => {
+export const CheckInForm = ({ onSubmit, onPhotoStaged }: CheckInFormProps) => {
+  const { getToken } = useAuth(); // INITIALIZE CORE HANDSHAKE HOOK
+  
   // DYNAMIC BACKEND TARGET ROUTING MATRIX
-  // FIXED: Forces absolute pathing to Render when browsing live on Vercel, avoiding .env compilation traps
   const API_BASE_URL = window.location.hostname.includes("vercel.app")
     ? "https://ai-physique-lab.onrender.com"
     : (import.meta.env.VITE_API_URL || "http://localhost:5000");
@@ -40,10 +42,14 @@ export const CheckInForm = ({ authToken, onSubmit, onPhotoStaged }: CheckInFormP
     try {
       console.log(`[Media Pipeline] Fetching secure signature token for ${position} profile from ${API_BASE_URL}...`);
       
+      // FIXED: Fetching token dynamically from the Clerk context right before dispatching
+      const dynamicToken = await getToken();
+      
       const sigResponse = await fetch(`${API_BASE_URL}/api/uploads/signature`, {
         method: "GET",
         headers: {
-          "Authorization": `Bearer ${authToken}`
+          "Authorization": `Bearer ${dynamicToken}`,
+          "Content-Type": "application/json"
         }
       });
 
