@@ -1,0 +1,356 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600;700;800;900&display=swap');
+
+:root {
+  --bg-pure-black: #000000;
+  --bg-deep-charcoal: #08080c;
+  --bg-input-field: #111116;
+  --accent-gymshark: #ff5a00;
+  --text-pure-white: #ffffff;
+  --text-gray-muted: #6e6e73;
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  
+  --font-heavy-display: 'Anton', 'Impact', sans-serif;
+  --font-body-clean: 'Inter', sans-serif;
+  
+  --transition-premium: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-pure-black);
+  color: var(--text-pure-white);
+  font-family: var(--font-body-clean);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* -----------------------------------------------------
+   HARDCORE PUBLIC ENTRANCE GATE STYLES
+   ----------------------------------------------------- */
+.auth-gate-viewport {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at center, rgba(15, 15, 22, 0.6) 0%, rgba(0, 0, 0, 0.95) 100%),
+              url('https://res.cloudinary.com/demo/image/fetch/q_auto,f_auto/https://api.gemini.ai/v1/user-content/eb794f487e7e95bcfe7df735c119b5e0.jpg');
+  background-size: cover;
+  background-position: center top;
+  padding: 24px;
+}
+
+.auth-gate-card {
+  background: rgba(8, 8, 12, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 48px 40px;
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.8);
+}
+
+.auth-gate-badge {
+  font-size: 0.75rem;
+  font-weight: 900;
+  color: var(--accent-gymshark);
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  margin-bottom: 12px;
+  display: inline-block;
+}
+
+.auth-gate-title {
+  font-family: var(--font-heavy-display);
+  font-size: 3.2rem;
+  line-height: 0.95;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin-bottom: 16px;
+  color: var(--text-pure-white);
+}
+
+.auth-gate-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-gray-muted);
+  line-height: 1.6;
+  margin-bottom: 32px;
+  font-weight: 500;
+}
+
+.btn-auth-trigger {
+  font-family: var(--font-heavy-display);
+  background: var(--text-pure-white);
+  color: #000000;
+  border: none;
+  border-radius: 4px;
+  padding: 18px 32px;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: var(--transition-premium);
+}
+
+.btn-auth-trigger:hover {
+  background: var(--accent-gymshark);
+  color: var(--text-pure-white);
+  box-shadow: 0 0 30px rgba(255, 90, 0, 0.2);
+}
+
+/* -----------------------------------------------------
+   HERO SECTOR (CBUM INTEGRATION)
+   ----------------------------------------------------- */
+.hero-header-section {
+  position: relative;
+  background: linear-gradient(
+                to bottom, 
+                rgba(0, 0, 0, 0.45) 0%, 
+                rgba(0, 0, 0, 0.85) 100%
+              ), 
+              url('https://res.cloudinary.com/demo/image/fetch/q_auto,f_auto/https://api.gemini.ai/v1/user-content/eb794f487e7e95bcfe7df735c119b5e0.jpg');
+  background-size: cover;
+  background-position: center top;
+  padding: 140px 32px 180px 32px;
+  text-align: center;
+}
+
+.heavy-display-text {
+  font-family: var(--font-heavy-display);
+  font-size: 4.5rem;
+  line-height: 0.95;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  margin-top: 12px;
+}
+
+.btn-stark-action {
+  font-family: var(--font-heavy-display);
+  background: transparent;
+  color: var(--text-pure-white);
+  border: 2px solid var(--text-pure-white);
+  padding: 12px 36px;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  margin-top: 24px;
+  transition: var(--transition-premium);
+}
+
+.btn-stark-action:hover {
+  background: var(--text-pure-white);
+  color: #000000;
+}
+
+/* -----------------------------------------------------
+   HORIZONTAL CARD REFERENCE ROW
+   ----------------------------------------------------- */
+.industrial-card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 1200px;
+  margin: -80px auto 60px auto;
+  padding: 0 24px;
+  position: relative;
+  z-index: 10;
+}
+
+@media (max-width: 850px) {
+  .industrial-card-grid { grid-template-columns: 1fr; margin-top: 20px; }
+}
+
+.gymshark-card {
+  background: var(--bg-deep-charcoal);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  overflow: hidden;
+  transition: var(--transition-premium);
+}
+
+.gymshark-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent-gymshark);
+}
+
+.gymshark-card .image-frame {
+  width: 100%;
+  height: 240px; 
+  overflow: hidden;
+  background: #0d0d12;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gymshark-card .image-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  filter: grayscale(100%) contrast(1.25) brightness(0.75);
+  transition: var(--transition-premium);
+}
+
+.gymshark-card:hover .image-frame img {
+  filter: grayscale(0%) contrast(1.1) brightness(1);
+  transform: scale(1.03);
+}
+
+.gymshark-card .card-footer-banner {
+  background: #111115;
+  color: #e4e4e7;
+  padding: 14px;
+  text-align: center;
+  font-family: var(--font-heavy-display);
+  font-size: 1.3rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  border-top: 1px solid var(--border-subtle);
+  transition: var(--transition-premium);
+}
+
+.gymshark-card:hover .card-footer-banner {
+  background: var(--text-pure-white);
+  color: #000000;
+}
+
+/* Ticker Divider */
+.dashboard-stark-divider {
+  background-color: #ffffff;
+  color: #000000;
+  padding: 50px 32px;
+  text-align: center;
+}
+
+.stark-display-text {
+  font-family: var(--font-heavy-display);
+  font-size: 2.2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+}
+
+/* -----------------------------------------------------
+   OPERATIONAL FORM WORK-PANELS
+   ----------------------------------------------------- */
+.card-matrix-form {
+  background: var(--bg-deep-charcoal);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 32px;
+  width: 100%;
+}
+
+.form-title-heavy {
+  font-family: var(--font-heavy-display);
+  font-size: 1.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-bottom: 24px;
+  border-left: 3px solid var(--accent-gymshark);
+  padding-left: 12px;
+  line-height: 1;
+}
+
+.form-input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.form-label-premium {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-gray-muted);
+}
+
+.input-premium {
+  background: var(--bg-input-field);
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+  color: var(--text-pure-white);
+  padding: 14px 16px;
+  font-family: var(--font-body-clean);
+  font-size: 0.95rem;
+  width: 100%;
+  transition: all 0.2s ease;
+}
+
+.input-premium:focus {
+  outline: none;
+  border-color: var(--accent-gymshark);
+  background: #161620;
+}
+
+.aspect-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 10px;
+  margin-bottom: 24px;
+}
+
+.aspect-upload-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 54px;
+  background: var(--bg-input-field);
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #d4d4d8;
+  transition: var(--transition-premium);
+}
+
+.aspect-upload-btn:hover {
+  border-color: var(--accent-gymshark);
+  background: #161620;
+  color: #ffffff;
+}
+
+.aspect-upload-btn.has-file {
+  border-color: var(--accent-gymshark);
+  color: var(--accent-gymshark);
+  background: rgba(255, 90, 0, 0.03);
+}
+
+.btn-gymshark-prime {
+  font-family: var(--font-heavy-display);
+  background: var(--text-pure-white);
+  color: var(--bg-pure-black);
+  border: none;
+  border-radius: 4px;
+  padding: 16px;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  width: 100%;
+  transition: var(--transition-premium);
+}
+
+.btn-gymshark-prime:hover {
+  background: var(--accent-gymshark);
+  color: var(--text-pure-white);
+}

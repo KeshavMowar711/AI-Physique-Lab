@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: gym-progress-ai-tracker-api
+    runtime: node
+    rootDir: server
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    envVars:
+      - key: PORT
+        value: 5000
+      - key: CLIENT_URL
+        sync: false
+      - key: MONGODB_URI
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: OPENAI_MODEL
+        value: gpt-4.1-mini
+        - key: JWT_SECRET
+        sync: false
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: CLOUDINARY_UPLOAD_FOLDER
+        value: gym-progress-tracker

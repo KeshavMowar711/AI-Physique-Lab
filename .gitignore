@@ -1,0 +1,14 @@
+# 1. Essential Heavy Dependencies
+node_modules/
+**/node_modules/
+
+# 2. Local Environment Keys & Production Profiles
+.env
+.env.local
+server/.env
+client/.env
+
+# 3. Cache Logs & Local Compiler Artifacts
+dist/
+build/
+.DS_Store
