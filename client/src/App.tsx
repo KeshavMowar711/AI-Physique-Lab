@@ -1,7 +1,8 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { SignIn, SignUp, SignedIn, SignedOut } from "@clerk/clerk-react";
-import { Dashboard } from "./pages/Dashboard";
+// FIXED: Path matches your exact explorer tree layout now
+import { Dashboard } from "./Dashboard";
 
 export default function App() {
   return (
@@ -25,13 +26,12 @@ export default function App() {
           }
         />
 
-        {/* SECURE DASHBOARD DESCENT LINKAGE */}
+        {/* SECURE DASHBOARD LINKAGE */}
         <Route
           path="/"
           element={
             <>
               <SignedIn>
-                {/* FIXED: No props passed here to satisfy IntrinsicAttributes constraints */}
                 <Dashboard />
               </SignedIn>
               <SignedOut>

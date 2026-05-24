@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "@clerk/clerk-react";
-// FIXED: Explicit structural asset linkage matching standard project partitions
-import { CheckInForm } from "../components/CheckInForm";
+// FIXED: Path steps directly into components folder layout without shifting hierarchies
+import { CheckInForm } from "./components/CheckInForm";
 
 interface AiReportSchema {
   summary: string;
@@ -115,13 +115,12 @@ export const Dashboard = () => {
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "40px", alignItems: "start" }}>
         
-        {/* LEFT COLUMN: TELEMETRY INPUT FORM */}
+        {/* LEFT COLUMN: INPUT */}
         <div>
-          {/* FIXED: Form component initialization maps strictly to type restrictions */}
           <CheckInForm authToken="" onSubmit={handleFormSubmit} onPhotoStaged={handlePhotoStaged} />
         </div>
 
-        {/* RIGHT COLUMN: BASE LOG STREAM */}
+        {/* RIGHT COLUMN: REGEN MATRIX LOG STREAM */}
         <div style={{ background: "var(--bg-deep-charcoal)", border: "1px solid var(--border-subtle)", padding: "32px", borderRadius: "6px", minHeight: "550px" }}>
           <h3 style={{ fontFamily: "var(--font-heavy-display)", fontSize: "1.6rem", textTransform: "uppercase", marginBottom: "24px", letterSpacing: "0.02em" }}>
             Database Log Stream
