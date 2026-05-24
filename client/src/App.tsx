@@ -49,11 +49,8 @@ function App() {
           STATE B: USER IS LOGGED IN (OPERATIONAL WORKSPACE)
           ----------------------------------------------------- */}
       <SignedIn>
-        {/* We explicitly build the shape DashboardProps expects to resolve strict null/undefined mismatches */}
-        <Dashboard 
-          user={user ? { firstName: user.firstName ?? undefined } : null} 
-          getAuthToken={getAuthToken} 
-        />
+        {/* With DashboardProps accepting null, we can pass user cleanly without typescript errors */}
+        <Dashboard user={user} getAuthToken={getAuthToken} />
       </SignedIn>
     </>
   );

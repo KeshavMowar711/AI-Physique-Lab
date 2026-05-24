@@ -2,7 +2,8 @@ import { CheckInForm } from "./components/CheckInForm";
 import { useState, useEffect } from "react";
 
 interface DashboardProps {
-  user: { firstName?: string } | null;
+  // UPDATED: Changed from string | undefined to string | null to perfectly match Clerk's UserResource type
+  user: { firstName?: string | null } | null;
   getAuthToken: () => Promise<string | null>;
 }
 
@@ -86,7 +87,6 @@ export const Dashboard = ({ user, getAuthToken }: DashboardProps) => {
   if (loadingToken) {
     return (
       <div style={{ background: "var(--bg-pure-black)", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        {/* FIXED: 'uppercase: true' changed to standard 'textTransform: "uppercase"' */}
         <span style={{ fontFamily: "var(--font-heavy-display)", fontSize: "1.5rem", color: "var(--accent-gymshark)", textTransform: "uppercase", letterSpacing: "0.1em" }}>
           Synchronizing Auth Matrix...
         </span>
