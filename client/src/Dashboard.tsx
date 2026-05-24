@@ -1,14 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "@clerk/clerk-react";
-import { CheckInForm } from "../components/CheckInForm";
+// FIXED: Path updated from '../components/CheckInForm' to match root src/ location
+import { CheckInForm } from "./components/CheckInForm";
 
-export const Dashboard = () => {
+// FIXED: Defined explicit prop interface to satisfy the App.tsx contract
+interface DashboardProps {
+  user?: any;
+  getAuthToken?: () => Promise<string | null>;
+}
+
+export const Dashboard = ({ user, getAuthToken }: DashboardProps) => {
   const { getToken } = useAuth();
   const [history, setHistory] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   // DYNAMIC BACKEND TARGET ROUTING MATRIX
-  // FIXED: Forces absolute pathing to Render when browsing live on Vercel, bypassing .env compilation traps
   const API_BASE_URL = window.location.hostname.includes("vercel.app")
     ? "https://ai-physique-lab.onrender.com"
     : (import.meta.env.VITE_API_URL || "http://localhost:5000");
@@ -16,7 +22,8 @@ export const Dashboard = () => {
   const fetchTelemetryHistory = async () => {
     try {
       console.log("[Dashboard] Initializing authorization token handshake...");
-      const token = await getToken();
+      // FIXED: Fall back to provided prop method if local hook is out of bounds
+      const token = getAuthToken ? await getAuthToken() : await getToken();
       if (!token) throw new Error("Authentication token signature missing");
       console.log("[Dashboard] Token acquired successfully.");
 
@@ -43,7 +50,7 @@ export const Dashboard = () => {
 
   const handleCheckInSubmit = async (formData: any) => {
     try {
-      const token = await getToken();
+      const token = getAuthToken ? await getAuthToken() : await getToken();
       const response = await fetch(`${API_BASE_URL}/api/progress`, {
         method: "POST",
         headers: {
@@ -56,7 +63,7 @@ export const Dashboard = () => {
       const resData = await response.json();
       if (resData.success) {
         alert("Check-in metric package committed cleanly to Atlas!");
-        fetchTelemetryHistory(); // Refresh feed grid
+        fetchTelemetryHistory(); 
       } else {
         alert(`Core Engine Rejection: ${resData.message}`);
       }
@@ -84,9 +91,10 @@ export const Dashboard = () => {
         {/* LEFT COLUMN: LOGGER FORM */}
         <div>
           <CheckInForm 
-            authToken="" // Form handles its internal fetch context automatically
+            authToken="" 
             onSubmit={handleCheckInSubmit}
-            onPhotoStaged={(position, url) => console.log(`Staged ${position}: ${url}`)}
+            // FIXED: Explicitly typed parameters to satisfy type contract checks
+            onPhotoStaged={(position: "front" | "side" | "back", url: string) => console.log(`Staged ${position}: ${url}`)}
           />
         </div>
 
