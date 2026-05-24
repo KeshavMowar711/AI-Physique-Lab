@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App.tsx';
+// FIXED: Dropped the explicit .tsx extension to satisfy compiler module resolution guidelines
+import App from './App';
 import { ClerkProvider } from '@clerk/clerk-react';
 
-// 🚀 FIXED: Enforce absolute flat relative path compilation for your stylesheet
+// Enforce absolute flat relative path compilation for your stylesheet
 import './styles.css';
 
-// Safety gate protection for Clerk production publishable keys context
 const CLERK_PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
 if (!CLERK_PUBLISHABLE_KEY) {
