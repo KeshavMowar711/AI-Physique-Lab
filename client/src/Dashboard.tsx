@@ -17,6 +17,10 @@ export const Dashboard = ({ user, getAuthToken }: DashboardProps) => {
     back: ""
   });
 
+  // DYNAMIC API CONFIGURATION MATRIX: 
+  // Looks for Vercel's environment variables first, otherwise targets your local fallback server
+  const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
   useEffect(() => {
     const initAuth = async () => {
       try {
@@ -40,7 +44,8 @@ export const Dashboard = ({ user, getAuthToken }: DashboardProps) => {
 
   const fetchHistory = async (token: string) => {
     try {
-      const response = await fetch("/api/progress", {
+      // FIXED: Swapped out relative paths for the absolute dynamic configuration variable
+      const response = await fetch(`${API_BASE_URL}/api/progress`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       
@@ -60,7 +65,8 @@ export const Dashboard = ({ user, getAuthToken }: DashboardProps) => {
 
   const handleCheckInSubmit = async (formData: any) => {
     try {
-      const response = await fetch("/api/progress", {
+      // FIXED: Configured absolute target pathway mapping
+      const response = await fetch(`${API_BASE_URL}/api/progress`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
