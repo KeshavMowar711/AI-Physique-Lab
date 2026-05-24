@@ -1,18 +1,18 @@
-// No external AI SDK imports needed! Completely self-contained.
+// No external AI SDK dependencies or module packages required! Completely self-contained native REST.
 
 export const generateAiReport = async ({ currentCheckIn, previousCheckIn }) => {
   try {
-    // FIXED: Aligned directly to match your GOOGLE_API_KEY written on your Render dashboard
+    // Dynamic matching configuration checks against both variable names on your dashboard
     const apiKey = process.env.GOOGLE_API_KEY || process.env.GOOGLE_GENAI_API_KEY;
     if (!apiKey) {
-      throw new Error("GOOGLE_API_KEY configuration variable is completely missing from your cloud cluster registry.");
+      throw new Error("GOOGLE_API_KEY configuration token is missing from your active shell profile memory.");
     }
 
     console.log("🤖 Processing physique analysis via direct Gemini REST API link...");
 
-    // 1. Process images into base64 arrays if they exist
     const contentsPayload = [];
 
+    // Native buffer translator converts binary files directly to base64 inline block assets
     const fetchImagePart = async (url) => {
       if (!url || !url.startsWith('http')) return null;
       try {
@@ -25,12 +25,12 @@ export const generateAiReport = async ({ currentCheckIn, previousCheckIn }) => {
           }
         };
       } catch (err) {
-        console.error("⚠️ Failed to pull asset from Cloudinary storage:", err.message);
+        console.error("⚠️ Failed to parse image asset array buffer from bucket storage link:", err.message);
         return null;
       }
     };
 
-    // FIXED: Items are fetched and pushed directly into a uniform, single flat-level parts array
+    // Parse visual reference buffers directly side-by-side inside flat array structures
     if (currentCheckIn.photos?.front) {
       const frontData = await fetchImagePart(currentCheckIn.photos.front);
       if (frontData) contentsPayload.push(frontData);
@@ -44,7 +44,7 @@ export const generateAiReport = async ({ currentCheckIn, previousCheckIn }) => {
       if (backData) contentsPayload.push(backData);
     }
 
-    // 2. Compose the structural instructions
+    // Compose coaching instructions matrix
     const textPrompt = {
       text: `
         You are an elite physique coach and expert bodybuilder analyzing a client check-in entry.
@@ -56,9 +56,9 @@ export const generateAiReport = async ({ currentCheckIn, previousCheckIn }) => {
 
         Examine any provided images. Assess current conditioning, muscle shape, structural definition, and estimate their body fat percentage.
 
-        CRITICAL: Return your response EXACTLY as a single stringified JSON object matching this schema. Do not write any explanations outside the JSON block.
+        CRITICAL: Return your response EXACTLY as a single stringified JSON object matching this schema blueprint layout. Do not write markdown wraps or backticks (\`\`\`json).
         
-        Expected structure layout:
+        Expected structure layout layout:
         {
           "summary": "Deep contextual evaluation of their current physique progress.",
           "changesObserved": ["Observation 1", "Observation 2"],
@@ -69,27 +69,25 @@ export const generateAiReport = async ({ currentCheckIn, previousCheckIn }) => {
       `
     };
 
-    // Add prompt instructions flat into the evaluation loop alongside the base64 vectors
+    // Push prompt block into the same flat parts data matrix context array block
     contentsPayload.push(textPrompt);
 
-    // 3. Make direct REST API call to stable gemini endpoints
     const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
     
     const geminiResponse = await fetch(endpoint, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      // FIXED: Added strict responseMimeType instruction to guarantee a valid parse loop
       body: JSON.stringify({ 
         contents: [{ parts: contentsPayload }],
         generationConfig: {
-          responseMimeType: "application/json"
+          responseMimeType: "application/json" // Forces Gemini to always respond with pure clean JSON structures
         }
       })
     });
 
     if (!geminiResponse.ok) {
       const errorText = await geminiResponse.text();
-      throw new Error(`Google API returned status ${geminiResponse.status}: ${errorText}`);
+      throw new Error(`Google REST Engine returned status ${geminiResponse.status}: ${errorText}`);
     }
 
     const jsonResult = await geminiResponse.json();
@@ -97,7 +95,7 @@ export const generateAiReport = async ({ currentCheckIn, previousCheckIn }) => {
     
     console.log("📥 Gemini Response Received successfully.");
 
-    // Clean up potential markdown formatting code blocks safely
+    // Regular Expression clear out parameters to ensure flawless parsing loops
     const cleanJsonString = rawAiText
       .replace(/```json/g, "")
       .replace(/```/g, "")
@@ -107,13 +105,13 @@ export const generateAiReport = async ({ currentCheckIn, previousCheckIn }) => {
 
   } catch (error) {
     console.error("❌ Gemini Processing Fallback Triggered:", error.message);
-    // Returns a fallback JSON schema object so the server NEVER sends a blank 500 drop response again
+    // Dynamic schema object structure fallback shield keeps your dashboard active even if tracking variables fault
     return {
-      summary: `Analysis engine processed metrics offline. System details: ${error.message}`,
-      changesObserved: ["Metrics logged in system registry"],
-      laggingMuscles: ["Visual tracking pending frame updates"],
-      workoutSuggestions: ["Continue running current progressive overload splits"],
-      dietSuggestions: ["Maintain current target caloric distribution variables"]
+      summary: `Metrics logged inside system registry container. AI processing engine offline status details: ${error.message}`,
+      changesObserved: ["Telemetry dataset variables indexed successfully"],
+      laggingMuscles: ["Visual evaluation parameters offline"],
+      workoutSuggestions: ["Maintain current target workout microcycle sets distribution rules"],
+      dietSuggestions: ["Maintain target calorie and energy distribution matrices configuration"]
     };
   }
 };

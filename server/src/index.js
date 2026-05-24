@@ -8,11 +8,11 @@ import { connectDatabase } from "./config/database.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Check if we are running live in the cloud environment
+// Check if we are running live in the cloud environment partition matrix
 const isProduction = process.env.NODE_ENV === 'production' || process.env.RENDER === 'true';
 
 if (!isProduction) {
-  // 1. Local environment file-discovery fallback loop
+  // Local environment file-discovery fallback loop
   const possiblePaths = [
     path.resolve(__dirname, '../.env'),       // inside server/
     path.resolve(__dirname, '../../.env'),    // inside AI Progress Tracker/
@@ -33,32 +33,35 @@ if (!isProduction) {
   }
 
   if (!envLoaded) {
-    console.log("\n🚨 CRITICAL WARNING: Could not find a physical .env file.");
+    console.log("\n🚨 CRITICAL WARNING: Could not find a physical .env configuration file.");
   }
 } else {
-  console.log("\n🚀 PRODUCTION ENGINE DETECTED: Utilizing variables directly from Render's cloud matrix.\n");
+  console.log("\n🚀 PRODUCTION ENGINE ACTIVATED: Utilizing environment variables straight from Render shell matrix.\n");
 }
 
-// 2. Diagnostics (This works flawlessly everywhere now!)
-console.log("--- ENVIRONMENT VERIFICATION ---");
+// Global Diagnostics Logging Array Block
+console.log("--- ENGINE ENVIRONMENT VERIFICATION ---");
 console.log("NODE_ENV:", process.env.NODE_ENV || "development");
 console.log("MONGODB_URI:", process.env.MONGODB_URI ? "✅ CONFIGURED" : "❌ MISSING");
 console.log("CLOUDINARY_CLOUD_NAME:", process.env.CLOUDINARY_CLOUD_NAME ? "✅ CONFIGURED" : "❌ MISSING");
-console.log("CLERK_SECRET_KEY:", process.env.CLERK_SECRET_KEY ? "✅ CONFIGURED" : "❌ MISSING");
-console.log("---------------------------------\n");
+console.log("GOOGLE_API_KEY:", process.env.GOOGLE_API_KEY ? "✅ CONFIGURED" : "❌ MISSING");
+console.log("---------------------------------------\n");
 
 const PORT = process.env.PORT || 5000;
 
 const startServer = async () => {
+  // Connect to MongoDB Atlas cluster node partition
   await connectDatabase();
+  
+  // Initialize the complete router express configuration context
   const app = createApp();
 
   app.listen(PORT, () => {
-    console.log(`Server listening on port ${PORT}`);
+    console.log(`🚀 Neural Vector Core API Node running live on port ${PORT}`);
   });
 };
 
 startServer().catch((error) => {
-  console.error("Failed to start server", error);
+  console.error("💥 SYSTEM CRASH: Failed to launch application gateway container:", error);
   process.exit(1);
 });
