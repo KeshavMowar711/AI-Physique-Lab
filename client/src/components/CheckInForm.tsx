@@ -8,7 +8,10 @@ interface CheckInFormProps {
 
 export const CheckInForm = ({ authToken, onSubmit, onPhotoStaged }: CheckInFormProps) => {
   // DYNAMIC BACKEND TARGET ROUTING MATRIX
-  const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+  // FIXED: Forces absolute pathing to Render when browsing live on Vercel, avoiding .env compilation traps
+  const API_BASE_URL = window.location.hostname.includes("vercel.app")
+    ? "https://ai-physique-lab.onrender.com"
+    : (import.meta.env.VITE_API_URL || "http://localhost:5000");
 
   const [weightKg, setWeightKg] = useState("");
   const [calories, setCalories] = useState("");
@@ -35,9 +38,8 @@ export const CheckInForm = ({ authToken, onSubmit, onPhotoStaged }: CheckInFormP
     setUploading(prev => ({ ...prev, [position]: true }));
 
     try {
-      console.log(`[Media Pipeline] Fetching secure signature token for ${position} profile...`);
+      console.log(`[Media Pipeline] Fetching secure signature token for ${position} profile from ${API_BASE_URL}...`);
       
-      // FIXED: Uses absolute base path instead of standard relative path proxying
       const sigResponse = await fetch(`${API_BASE_URL}/api/uploads/signature`, {
         method: "GET",
         headers: {
@@ -144,7 +146,7 @@ export const CheckInForm = ({ authToken, onSubmit, onPhotoStaged }: CheckInFormP
         
         <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
           {/* FRONT PROFILE SLIP */}
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "between", background: "var(--bg-pure-black)", padding: "12px", borderRadius: "4px", border: "1px solid var(--border-subtle)" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "var(--bg-pure-black)", padding: "12px", borderRadius: "4px", border: "1px solid var(--border-subtle)" }}>
             <span style={{ fontSize: "0.85rem", fontWeight: "700" }}>Front View:</span>
             <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, "front")} style={{ marginLeft: "auto", fontSize: "0.8rem" }} />
             {uploading.front && <span style={{ fontSize: "0.75rem", color: "var(--accent-gymshark)" }}>LOCKING IN...</span>}
@@ -152,7 +154,7 @@ export const CheckInForm = ({ authToken, onSubmit, onPhotoStaged }: CheckInFormP
           </div>
 
           {/* SIDE PROFILE SLIP */}
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "between", background: "var(--bg-pure-black)", padding: "12px", borderRadius: "4px", border: "1px solid var(--border-subtle)" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "var(--bg-pure-black)", padding: "12px", borderRadius: "4px", border: "1px solid var(--border-subtle)" }}>
             <span style={{ fontSize: "0.85rem", fontWeight: "700" }}>Side View:</span>
             <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, "side")} style={{ marginLeft: "auto", fontSize: "0.8rem" }} />
             {uploading.side && <span style={{ fontSize: "0.75rem", color: "var(--accent-gymshark)" }}>LOCKING IN...</span>}
@@ -160,7 +162,7 @@ export const CheckInForm = ({ authToken, onSubmit, onPhotoStaged }: CheckInFormP
           </div>
 
           {/* BACK PROFILE SLIP */}
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "between", background: "var(--bg-pure-black)", padding: "12px", borderRadius: "4px", border: "1px solid var(--border-subtle)" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "var(--bg-pure-black)", padding: "12px", borderRadius: "4px", border: "1px solid var(--border-subtle)" }}>
             <span style={{ fontSize: "0.85rem", fontWeight: "700" }}>Back View:</span>
             <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, "back")} style={{ marginLeft: "auto", fontSize: "0.8rem" }} />
             {uploading.back && <span style={{ fontSize: "0.75rem", color: "var(--accent-gymshark)" }}>LOCKING IN...</span>}
