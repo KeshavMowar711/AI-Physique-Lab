@@ -8,35 +8,43 @@ import { connectDatabase } from "./config/database.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// 1. Define potential locations where your .env file might be hiding
-const possiblePaths = [
-  path.resolve(__dirname, '../.env'),       // inside server/
-  path.resolve(__dirname, '../../.env'),    // inside AI Progress Tracker/
-  path.resolve(__dirname, '.env'),          // inside server/src/
-];
+// Check if we are running live in the cloud environment
+const isProduction = process.env.NODE_ENV === 'production' || process.env.RENDER === 'true';
 
-let envLoaded = false;
+if (!isProduction) {
+  // 1. Local environment file-discovery fallback loop
+  const possiblePaths = [
+    path.resolve(__dirname, '../.env'),       // inside server/
+    path.resolve(__dirname, '../../.env'),    // inside AI Progress Tracker/
+    path.resolve(__dirname, '.env'),          // inside server/src/
+  ];
 
-for (const p of possiblePaths) {
-  if (fs.existsSync(p)) {
-    dotenv.config({ path: p });
-    console.log(`\n✅ FOUND AND LOADED .ENV AT: ${p}\n`);
-    envLoaded = true;
-    break;
-  } else {
-    console.log(`❌ Checked path (not found): ${p}`);
+  let envLoaded = false;
+
+  for (const p of possiblePaths) {
+    if (fs.existsSync(p)) {
+      dotenv.config({ path: p });
+      console.log(`\n✅ FOUND AND LOADED LOCAL .ENV AT: ${p}\n`);
+      envLoaded = true;
+      break;
+    } else {
+      console.log(`❌ Checked local path (not found): ${p}`);
+    }
   }
+
+  if (!envLoaded) {
+    console.log("\n🚨 CRITICAL WARNING: Could not find a physical .env file.");
+  }
+} else {
+  console.log("\n🚀 PRODUCTION ENGINE DETECTED: Utilizing variables directly from Render's cloud matrix.\n");
 }
 
-if (!envLoaded) {
-  console.log("\n🚨 CRITICAL: Could not find your .env file anywhere!");
-  console.log("Please create a file named exactly '.env' inside your 'server' folder.\n");
-}
-
-// 2. Diagnostics
+// 2. Diagnostics (This works flawlessly everywhere now!)
 console.log("--- ENVIRONMENT VERIFICATION ---");
+console.log("NODE_ENV:", process.env.NODE_ENV || "development");
 console.log("MONGODB_URI:", process.env.MONGODB_URI ? "✅ CONFIGURED" : "❌ MISSING");
-console.log("CLOUDINARY_CLOUD_NAME:", process.env.CLOUDINARY_CLOUD_NAME || "❌ MISSING");
+console.log("CLOUDINARY_CLOUD_NAME:", process.env.CLOUDINARY_CLOUD_NAME ? "✅ CONFIGURED" : "❌ MISSING");
+console.log("CLERK_SECRET_KEY:", process.env.CLERK_SECRET_KEY ? "✅ CONFIGURED" : "❌ MISSING");
 console.log("---------------------------------\n");
 
 const PORT = process.env.PORT || 5000;
