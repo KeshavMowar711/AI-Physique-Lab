@@ -8,31 +8,28 @@ export const createApp = () => {
   const app = express();
 
   // 1. DYNAMIC GLOBAL INTERCEPTOR MIDDLEWARE MATRIX
-  // FIXED: Allows BOTH your local dev tool and your live production Vercel frontend to bypass security filters cleanly
-  const allowedOrigins = [
-    'http://localhost:5173',
-    'https://ai-physique-lab-client-gduu5asue-keshavmowar711s-projects.vercel.app', // <-- CHANGE THIS to your exact live Vercel frontend domain string!
-  ];
-
+  // FIXED: Dynamically accepts ANY Vercel deployment subdomain to prevent preflight CORS blocks
   app.use(cors({
     origin: function (origin, callback) {
-      // Allow requests with no origin (like mobile apps or curl requests)
       if (!origin) return callback(null, true);
-      if (allowedOrigins.indexOf(origin) === -1) {
-        const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-        return callback(new Error(msg), false);
+      
+      const isLocal = origin.startsWith('http://localhost');
+      const isVercel = origin.endsWith('.vercel.app') || origin.includes('vercel.app');
+      
+      if (isLocal || isVercel) {
+        return callback(null, true);
+      } else {
+        return callback(new Error('Blocked by Core Security CORS Policy'), false);
       }
-      return callback(null, true);
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
   }));
-  
+
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
   // 2. ROOT ALIVE INDEX ROADMAP
-  // FIXED: Bypasses native browser 404 rendering when visiting your Render backend URL directly
   app.get('/', (req, res) => {
     return res.status(200).json({ status: "online", system: "Neural Vector Core API Gateway Node" });
   });
