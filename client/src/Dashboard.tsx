@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "@clerk/clerk-react";
+// FIXED: Explicit structural asset linkage matching standard project partitions
 import { CheckInForm } from "../components/CheckInForm";
 
 interface AiReportSchema {
@@ -36,7 +37,6 @@ export const Dashboard = () => {
     ? "https://ai-physique-lab.onrender.com"
     : (import.meta.env.VITE_API_URL || "http://localhost:5000");
 
-  // Fetch telemetry records on initialization mount
   useEffect(() => {
     const fetchHistory = async () => {
       try {
@@ -65,7 +65,6 @@ export const Dashboard = () => {
     fetchHistory();
   }, [getToken, API_BASE_URL]);
 
-  // CORE METRIC SUBMISSION HANDLER
   const handleFormSubmit = async (payload: any) => {
     try {
       console.log("[Dashboard Cluster] Dispatching telemetry package to Render...");
@@ -86,11 +85,8 @@ export const Dashboard = () => {
         console.log("💾 Global telemetry registry locked down successfully!", resData.data);
         
         const newRecord: CheckInRecord = resData.data;
-        
-        // 🚀 SAFE STATE UPDATE MATRIX: Prepend new record to history list safely
         setCheckInHistory(prev => [newRecord, ...prev]);
         
-        // Extract and assign active visual feedback block safely
         if (newRecord.aiReport) {
           setActiveReport(newRecord.aiReport);
         }
@@ -101,7 +97,7 @@ export const Dashboard = () => {
       }
     } catch (err) {
       console.error("💥 Dashboard pipeline submission exception:", err);
-      alert("Submission dropped due to a client-side interface integration error.");
+      alert("Submission dropped due to an internal system schema error.");
     }
   };
 
@@ -121,10 +117,11 @@ export const Dashboard = () => {
         
         {/* LEFT COLUMN: TELEMETRY INPUT FORM */}
         <div>
+          {/* FIXED: Form component initialization maps strictly to type restrictions */}
           <CheckInForm authToken="" onSubmit={handleFormSubmit} onPhotoStaged={handlePhotoStaged} />
         </div>
 
-        {/* RIGHT COLUMN: BASE LOG STREAM & GENI REAL-TIME FEEDBACK */}
+        {/* RIGHT COLUMN: BASE LOG STREAM */}
         <div style={{ background: "var(--bg-deep-charcoal)", border: "1px solid var(--border-subtle)", padding: "32px", borderRadius: "6px", minHeight: "550px" }}>
           <h3 style={{ fontFamily: "var(--font-heavy-display)", fontSize: "1.6rem", textTransform: "uppercase", marginBottom: "24px", letterSpacing: "0.02em" }}>
             Database Log Stream
@@ -179,7 +176,7 @@ export const Dashboard = () => {
             </div>
           )}
 
-          {/* HISTORIC STREAM PREVIEW LOGS LIST */}
+          {/* HISTORIC STREAM PREVIEW */}
           {checkInHistory.length > 1 && (
             <div style={{ marginTop: "32px", borderTop: "1px solid var(--border-subtle)", paddingTop: "24px" }}>
               <h4 style={{ fontFamily: "var(--font-heavy-display)", fontSize: "1.1rem", textTransform: "uppercase", marginBottom: "16px" }}>Historic Entry Log Streams</h4>

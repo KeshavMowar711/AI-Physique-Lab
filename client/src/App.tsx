@@ -1,59 +1,49 @@
-import { SignedIn, SignedOut, useUser, useAuth } from "@clerk/clerk-react";
-import { SignInButton } from "@clerk/clerk-react";
-import { Dashboard } from "./Dashboard";
-import "./styles.css"; 
+import React from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { SignIn, SignUp, SignedIn, SignedOut } from "@clerk/clerk-react";
+import { Dashboard } from "./pages/Dashboard";
 
-function App() {
-  const { user } = useUser();
-  const { getToken } = useAuth();
-
-  const getAuthToken = async () => {
-    return await getToken();
-  };
-
+export default function App() {
   return (
-    <>
-      {/* -----------------------------------------------------
-          STATE A: USER IS LOGGED OUT (PREMIUM ACTIVE ENTRANCE GATE)
-          ----------------------------------------------------- */}
-      <SignedOut>
-        <div className="auth-gate-viewport">
-          <div className="auth-gate-card">
-            
-            <span className="auth-gate-badge">Neural Vector Engine</span>
-            
-            <h1 className="auth-gate-title">
-              AI Physique<br />Tracker
-            </h1>
-            
-            <p className="auth-gate-subtitle">
-              Analyze muscle growth vectors, establish tracking nodes, and isolate structural weak areas powered entirely by Gemini AI diagnostics.
-            </p>
+    <Router>
+      <Routes>
+        {/* PUBLIC AUTHENTICATION GATEWAYS */}
+        <Route
+          path="/sign-in"
+          element={
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh", background: "var(--bg-pure-black)" }}>
+              <SignIn routing="path" path="/sign-in" signUpUrl="/sign-up" redirectUrl="/" />
+            </div>
+          }
+        />
+        <Route
+          path="/sign-up"
+          element={
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh", background: "var(--bg-pure-black)" }}>
+              <SignUp routing="path" path="/sign-up" signInUrl="/sign-in" redirectUrl="/" />
+            </div>
+          }
+        />
 
-            {/* Clerk hooks up the action event directly to this styled button */}
-            <SignInButton mode="modal">
-              <button className="btn-auth-trigger">
-                <span>Sign In to Start Tracking</span>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="5" y1="12" x2="19" y2="12"></line>
-                  <polyline points="12 5 19 12 12 19"></polyline>
-                </svg>
-              </button>
-            </SignInButton>
+        {/* SECURE DASHBOARD DESCENT LINKAGE */}
+        <Route
+          path="/"
+          element={
+            <>
+              <SignedIn>
+                {/* FIXED: No props passed here to satisfy IntrinsicAttributes constraints */}
+                <Dashboard />
+              </SignedIn>
+              <SignedOut>
+                <Navigate to="/sign-in" replace />
+              </SignedOut>
+            </>
+          }
+        />
 
-          </div>
-        </div>
-      </SignedOut>
-
-      {/* -----------------------------------------------------
-          STATE B: USER IS LOGGED IN (OPERATIONAL WORKSPACE)
-          ----------------------------------------------------- */}
-      <SignedIn>
-        {/* Force type casting to 'any' completely disables the compiler error check on this assignment block */}
-        <Dashboard user={user as any} getAuthToken={getAuthToken} />
-      </SignedIn>
-    </>
+        {/* CATCH-ALL REDIRECT VECTOR */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </Router>
   );
 }
-
-export default App;
